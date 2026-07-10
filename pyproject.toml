@@ -1,7 +1,7 @@
 [project]
 name = "gongkao-analysis"
 version = "0.1.0"
-description = "Add your description here"
+description = "公务员考试数据分析：基于 pandas + matplotlib 对国考/省考 83 万条职位数据进行多维度分析"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
