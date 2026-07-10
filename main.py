@@ -1,6 +1,4 @@
-def main():
-    print("Hello from gongkao-analysis!")
-
+from analysis import main
 
 if __name__ == "__main__":
     main()

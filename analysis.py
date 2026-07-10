@@ -1,10 +1,22 @@
+import sys
+import platform
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
 from pathlib import Path
 
-matplotlib.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei"]
+sns.set_style("whitegrid")
+
+_font_map = {
+    "Windows": ["SimHei", "Microsoft YaHei"],
+    "Darwin": ["PingFang SC", "Heiti SC"],
+    "Linux": ["WenQuanYi Micro Hei", "Noto Sans CJK SC"],
+}
+matplotlib.rcParams["font.sans-serif"] = _font_map.get(
+    platform.system(), ["sans-serif"]
+)
 matplotlib.rcParams["axes.unicode_minus"] = False
 
 DATA_DIR = Path("gongkao")
@@ -22,6 +34,8 @@ def load_all_data():
         df_gk["exam_type"] = "国考"
         dfs.append(df_gk)
         print(f"国考数据: {len(df_gk)} 条")
+    else:
+        print(f"警告: 未找到 {guokao_path}")
 
     shengkao_dir = DATA_DIR / "省考"
     if shengkao_dir.exists():
@@ -31,6 +45,12 @@ def load_all_data():
             df_sk["exam_type"] = "省考"
             dfs.append(df_sk)
         print(f"省考数据: {len(dfs) - 1} 个省份")
+    else:
+        print(f"警告: 未找到 {shengkao_dir}")
+
+    if not dfs:
+        print("错误: 没有加载到任何数据，请确保 gongkao/ 目录存在且包含 CSV 文件")
+        sys.exit(1)
 
     df = pd.concat(dfs, ignore_index=True)
     print(f"总数据量: {len(df)} 条, {len(df.columns)} 列")
